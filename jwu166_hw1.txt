@@ -1,0 +1,98 @@
+#include <stdio.h>
+char 9a, b2; // error
+INT ar[10];  // error
+long fr; nx; //error
+int * p;
+
+int main (void){
+      int auto ;  //error
+      int x;
+      ar[1] = x;
+      *p = 10;
+      suto = chg(x); //error
+      return auto; //error
+}
+int chg(long  fr)  {
+     if (fr = 0) {  //error
+          x = 10; //error
+          ar[10] = 10; //error
+        } else {
+             ar[1] = 1;
+        }
+    return ar[1];
+}
+   
+
+
+Jonathan Wu
+CS471 Assignment 1
+1.
+Line 2. char 9a. b2; lexical error - variables cannot start with a number, 9a can be changed to a9
+Line 3. INT ar[10]; lexical error - int should be all lowercase, INT is not a valid token
+Line 4. long fr; nx; syntactical error - nx has no identifier, could be changed to long fr; long nx;
+Line 8. int auto; syntactical error - this goes through the lexer since both int and auto are keywords, the parser would determine that there is no valid variable name for either int or auto.
+Line 12. suto = chg(x); static semantic error = chg has not been defined, can define int chg(long); in a line before the main();
+Line 13. return auto; static semantic error - should be return suto, auto is a keyword and cannot be returned
+Line 16. if(fr = 0) { uncheckable/logical error - it should be if (fr == 0) {. In if(fr = 0) { the fr = 0 is an operator which should return a true value, this if loop will always occur.
+Line 17. x = 10; syntactical error - x has not been defined, can set int x; in the previous line.
+Line 18. ar[10] = 10; uncheckable error - ar[10] is an index out of bound, C would still perform this without an error so it is uncheckable. You could change either the initial length of ar or the index that is accessed, it could also be ar[1] as well, if that is the value that is expected to return.
+
+2.
+	.file	"powI.c"
+	.text
+	.globl	powI
+	.type	powI, @function
+powI:
+.LFB0:
+	.cfi_startproc
+	pushq	%rbp				Creation of stack frame, function is put on
+	.cfi_def_cfa_offset 16			
+	.cfi_offset 6, -16			
+	movq	%rsp, %rbp			
+	.cfi_def_cfa_register 6			
+	movl	%edi, -20(%rbp)			Argument storage - pow variable
+	movl	%esi, -24(%rbp)			Argument storage - base variable
+	movl	$1, -4(%rbp)			Argument storage - Local variable acc 
+	movl	$0, -8(%rbp)			Argument storage - Local variable p
+	jmp	.L2
+.L3:
+	movl	-4(%rbp), %eax			move the acc variable into %eax
+	imull	-24(%rbp), %eax			multiplies the variables, acc = acc * base, stores result in %eax
+	movl	%eax, -4(%rbp)			moves the result from %eax back into the acc variable
+	addl	$1, -8(%rbp)			Increments p
+.L2:
+	movl	-8(%rbp), %eax			move incremented p variable into %eax	
+	cmpl	-20(%rbp), %eax			Compares p to break out of the loop
+	jl	.L3				Start of loop, will cycle back to L3 until loop is finished
+	movl	-4(%rbp), %eax			move the acc variable back into %eax
+	popq	%rbp				Function is popped out of stack frame
+	.cfi_def_cfa 7, 8			
+	ret					Returns acc
+	.cfi_endproc				Exit from function
+.LFE0:
+	.size	powI, .-powI
+	.ident	"GCC: (Debian 8.3.0-6) 8.3.0"
+	.section	.note.GNU-stack,"",@progbits
+
+
+3.
+File - pow_full.c
+Both implementations should be O(n) time complexity, where n is pow.
+Recursive functions are easier to read but slower depending on the language because of the multiple function calls. The iterative approach would be quicker because of a single function call.
+
+4.
+Refer to pow_full.py
+Run as : python3 pow_full.py INT_BASE INT_POWER
+
+5.
+Undefined behavior - behavior, upon use of a nonportable or erroneous program constroct or of erroneous data, for which this International Standard imposes no requirements. Possible undefined behavior ranges from ignoring the sitation completely with unpredictable results, to behaving during translation or program execution in a documented manner characteristic of the environment execution.
+Cited from http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf, page 4.
+
+6.
+Undefined vs unspecified behavior.
+
+7.
+
+8.
+
+
