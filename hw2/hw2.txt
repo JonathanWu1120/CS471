@@ -1,0 +1,102 @@
+#Jonathan Wu
+#CS471 Assignment 2
+
+#Question 1
+#Answer Here:
+<command> := <expr>
+<expr> := <term> | <term> + <expr>
+<term> := <factor> | <factor> * <term>
+<factor> := (<expr>) | <number>
+<number> := <digit> | <number><digit>
+<digit> := 0|1|2|3|4|5|6|7|8|9
+
+The grammar is right recursive. This does not affect the associativity of plus and multi since multi still has a higher precedence than plus.
+
+#Question 2
+#Answer Here:
+<command> := <expr>
+<expr> := <minus> | <minus> + <expr>
+<minus> := <term> | <term> - <minus>
+<term> := <exponent> | <exponent> * <term>
+<exponent> := <factor> | <factor> ^ <exponent>
+<factor> := (<expr>) | <number>
+<number> := <digit> | <number><digit>
+<digit> := 0|1|2|3|4|5|6|7|8|9
+
+#Question 3
+#Answer Here:
+1 + 2 - 2
+command
+expr
+minus '+' expr
+term '+' expr
+exponent '+' expr
+factor '+' expr
+number '+' expr
+digit '+' expr
+'1+' expr
+'1+' minus
+'1+' term '-' minus
+'1+' exponent '-' minus
+'1+' factor '-' minus
+'1+' number '-' minus
+'1+' digit '-' minus
+'1+2-' minus
+'1+2-' term
+'1+2-' exponent
+'1+2-' factor
+'1+2-' number
+'1+2-' digit
+'1+2-2'
+
+1 + 2 - 3 * 5
+command
+expr
+minus '+' expr
+term '+' expr
+exponent '+' expr
+factor '+' expr
+number '+' expr
+digit '+' expr
+'1+' expr
+'1+' minus
+'1+' term '-' minus
+'1+' exponent '-' minus
+'1+' factor '-' minus
+'1+' number '-' minus
+'1+' digit '-' minus
+'1+2-' minus
+'1+2-' term
+'1+2-' exponent '*' term
+'1+2-' factor '*' term
+'1+2-' number '*' term
+'1+2-' digit '*' term
+'1+2-3*' term
+'1+2-3*' exponent
+'1+2-3*' factor
+'1+2-3*' number
+'1+2-3*' digit
+'1+2-3*5'
+
+2 ^ 5 ^ 2
+command
+expr
+minus
+term
+exponent
+factor '^' exponent
+number '^' exponent
+digit '^' exponent
+'2^' exponent
+'2^' factor '^' exponent
+'2^' number '^' exponent
+'2^' digit '^' exponent
+'2^5^' exponent
+'2^5^' factor
+'2^5^' number
+'2^5^' digit
+'2^5^2'
+
+#Question 4
+#Answer here:
+Refer to the arith1.c file.
