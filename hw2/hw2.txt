@@ -100,3 +100,146 @@ digit '^' exponent
 #Question 4
 #Answer here:
 Refer to the arith1.c file.
+
+#Question 5
+#Answer here:
+
+<command> := <expr>
+<expr> := <term> | <term> + <term>
+<term> := <factor> | <factor> * <factor>
+<factor> := (<expr>) | <number>
+<number> := <digit> | <number><digit>
+<digit> := 0|1|2|3|4|5|6|7|8|9
+I do not believe that the grammar is either left or right recursive. This makes the associativity of plus and multi unclear.
+
+#Question 6
+#Answer Here:
+
+<command> := <expr>
+<expr> := <sub> | <sub> + <sub>
+<sub> := <term> | <sub> - <term>
+<term> := <expon> | <expon> * <expon>
+<expon> := <factor> | <expon> ^ <factor>
+<factor> := (<expr>) | <number>
+<number> := <digit> | <number><digit>
+<digit> := 0|1|2|3|4|5|6|7|8|9
+
+#Question 7
+#Answer here:
+
+1 + 2 - 2
+command
+expr
+sub '+' sub
+term '+' sub
+expon '+' sub
+factor '+' sub
+number '+' sub
+digit '+' sub
+'1+' sub
+'1+' term '-' term
+'1+' expon '-' term
+'1+' factor '-' term
+'1+' number '-' term
+'1+' digit'-' term
+'1+2-' term
+'1+2-' expon
+'1+2-' factor
+'1+2-' number
+'1+2-' digit
+'1+2-2'
+
+1 + 2 - 3 * 5
+sub '+' sub
+term '+' sub
+expon '+' sub
+factor '+' sub
+number '+' sub
+digit '+' sub
+'1+' sub
+'1+' term '-' term
+'1+' expon '-' term
+'1+' factor '-' term
+'1+' number '-' term
+'1+' digit'-' term
+'1+2-' term
+'1+2-' expon '*' expon
+'1+2-' factor '*' expon
+'1+2-' number '*' expon
+'1+2-' digit '*' expon
+'1+2-3*' expon
+'1+2-3*' factor
+'1+2-3*' number
+'1+2-3*' digit
+'1+2-3*5'
+
+2 ^ 5 ^ 2
+command
+expr
+sub
+term
+expon
+expon '^' factor
+expon '^' factor '^' factor
+factor '^' factor '^' factor
+number '^' factor '^' factor
+'2^' factor '^' factor
+'2^' number '^' factor
+'2^5^' factor
+'2^5^' number
+'2^5^2'
+
+#Question 8
+#Answer here:
+Consult file arith2.c
+##TODO
+
+#Question 9
+#Answer here:
+Both _Bool and bool are used to store the value 0 or 1 for true and false. _Bool was made because the standards committee realized most existing software may have defined 'bool' so the underscore and uppercase are part of the new keyword to avoid breaking existing code. bool exists as an alias for _Bool. One is not better than the other, though _Bool can be confusing for some people, so bool is more likely to be used.
+
+cited from: https://www.quora.com/In-C-programming-what-is-the-difference-between-bool-and-_Bool
+
+#Question 10
+#Answer here:
+Pragmas are hints for the compiler. They are processed by the scanner because they can appear anywhere in the source program, though in certain languages, they are permitted only in certain well defined places in the grammar. 
+Pragmas can turn various kinds of run-time checks on or off, they can turn certain code improvements on or off, and they can enable or disable performance profiling. Some downsides are that some pragmas can change program semantics.
+Cited from: Programming Language Syntax - Michael L. Scott, https://www.sciencedirect.com/topics/computer-science/compilation-process
+
+#Question 11
+#Answer here:
+a. w ^ x ^ y - z
+((w ^ (x ^ y)) - z)
+- ^ w ^ x y z
+b.w - x ^ y ^ z
+(w - ( x ^ ( y ^ z)))
+- w ^ x ^ y z
+c.w * x * y - z
+(((w * x) * y) - z)
+- * * w x y z
+d.w + x * y + z
+((w + (x * y)) + z)
++ + w * x y z
+
+#Question 12
+#Answer here:
+a. w ^ x ^ y - z
+((w ^ (x ^ y)) - z)
+w x y ^ ^ z -
+b.w - x ^ y ^ z
+(w - ( x ^ ( y ^ z)))
+w x y z ^ ^ -
+c.w * x * y - z
+(((w * x) * y) - z)
+w x * y * z -
+d.w + x * y + z
+((w + (x * y)) + z)
+w x y * + z +
+
+#Question 13
+#Answer here:
+a.ack(1,0) = 
+ack(1,0) = ack(1 - 1, 1) == ack(0,1) = 2
+ack(1,0) = 2
+b.ack(0,6)
+ack(0,6) = 7
