@@ -11,6 +11,8 @@ char token; /* holds the current input character for the parse */
 /* declarations to allow arbitrary recursion */
 void command(void);
 int expr(void);
+int sub(void);
+int expon(void);
 int term(void);
 int factor(void);
 int number(void);
@@ -50,21 +52,44 @@ void command(void)
 }
 
 int expr(void) { 
-  int result = term();
+  int result = sub();
   while (token == '+') { 
     match('+');
-    result += term();
+    result += sub();
   }
   return result;
 }
 
+int sub(void){
+	int result = term();
+	while(token == '-'){
+		match('-');
+		result -= term();
+	}
+	return result;
+}
+
 int term(void) { 
-  int result = factor();
+  int result = expon();
   while (token == '*') { 
     match('*');
-    result *= factor();
+    result *= expon();
   }
   return result;
+}
+
+int expon(void){
+	int result = factor();
+	while(token == '^'){
+		match('^');
+		int i;
+		int exp = factor();
+		int base = result;
+		for(i = 1; i < exp; i++){
+			result *= base;
+		}
+	}
+	return result;
 }
 
 int factor(void) { 

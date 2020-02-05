@@ -105,21 +105,21 @@ Refer to the arith1.c file.
 #Answer here:
 
 <command> := <expr>
-<expr> := <term> | <term> + <term>
-<term> := <factor> | <factor> * <factor>
+<expr> := <term>  {+ <expr>}
+<term> := <factor> {* <factor>}
 <factor> := (<expr>) | <number>
 <number> := <digit> | <number><digit>
 <digit> := 0|1|2|3|4|5|6|7|8|9
-I do not believe that the grammar is either left or right recursive. This makes the associativity of plus and multi unclear.
+The grammar is left recursive, this would make the addition and multi operators left associative.
 
 #Question 6
 #Answer Here:
 
 <command> := <expr>
-<expr> := <sub> | <sub> + <sub>
-<sub> := <term> | <sub> - <term>
-<term> := <expon> | <expon> * <expon>
-<expon> := <factor> | <expon> ^ <factor>
+<expr> := <term>  {+ <expr>}
+<sub> := <term> {- <term>}
+<term> := <expon> {* <expon>}
+<expon> := <factor> {^ <factor>}
 <factor> := (<expr>) | <number>
 <number> := <digit> | <number><digit>
 <digit> := 0|1|2|3|4|5|6|7|8|9
@@ -192,7 +192,6 @@ number '^' factor '^' factor
 #Question 8
 #Answer here:
 Consult file arith2.c
-##TODO
 
 #Question 9
 #Answer here:
