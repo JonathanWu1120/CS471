@@ -215,6 +215,10 @@ has_item/2.
 
 /* Problem 3 Answer: */
 
+has_item(X,[X | Y]).
+has_item(X,[Y|T]) :- has_item(X,T).
+
+
 /* Problem 3 Test: */
 %:- has_item((1,3),[(1,2),(1,3)]).     % SUCCEED
 %:- has_item(3,[3]).         % SUCCEED
@@ -226,6 +230,8 @@ has_item/2.
 */
 
 /* Problem 4 Answer: */
+
+DO SOMETHING HERE
 
 /* Problem 4 Test: */
 % :- init([1], []).       % SUCCEED
@@ -240,6 +246,12 @@ NOTE: You may match two elements at a time against a list: [X,Y|Xs] = List. It's
 some_rule([X,Y|Xs]) :- ...  */
 
 /* Problem 5 Answer: */
+
+is_decreasing([]).
+is_decreasing([_]).
+is_decreasing([X1,X2|T]) :-
+	X1 >= X2,
+	is_decreasing([X2|T]).
 
 /* Problem 5 Test: */
 %:- is_decreasing([]).            % SUCCEED
@@ -262,6 +274,12 @@ NOTE: Don't worry about the error cases: i.e, N greater than the length of Y.  *
 
 /* Problem 6 Answer: */
 
+element_at(X,[X|_],0).
+element_at(X,[_|T],Y) :-
+	Z is Y - 1,
+	element_at(X,T,Z).
+	
+
 /* Problem 6 Test: */
 %:- element_at(3,[1,2,3],2).   % SUCCEED
 %:- element_at(1,[1,2,3],0).   % SUCCEED
@@ -277,6 +295,8 @@ NOTE: Don't worry about the error cases: i.e, N greater than the length of Z.  *
 
 /* Problem 7 Answer: */
 
+delete_at(X,[Y|T],0,[W|T]).
+
 /* Problem 7 Test: */
 
 %:- delete_at(3,[1,2,3,3],2,[1,2,3]).  % SUCCEED
@@ -284,11 +304,6 @@ NOTE: Don't worry about the error cases: i.e, N greater than the length of Z.  *
 %:- delete_at(a,[1,a,2,3],1,[1,2,3]).  % SUCCEED
 
 %:- delete_at(1,[1,2,3],0,[1,2,3]).    % FAIL
-
-
-
-
-
 
 /* Problem 8:
 
