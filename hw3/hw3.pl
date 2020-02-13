@@ -231,7 +231,10 @@ has_item(X,[Y|T]) :- has_item(X,T).
 
 /* Problem 4 Answer: */
 
-DO SOMETHING HERE
+init([_],[]).
+init([X|X1],[Y|Y1]):-
+	member(Y,X),
+	init(X1,Y1).
 
 /* Problem 4 Test: */
 % :- init([1], []).       % SUCCEED
@@ -295,7 +298,10 @@ NOTE: Don't worry about the error cases: i.e, N greater than the length of Z.  *
 
 /* Problem 7 Answer: */
 
-delete_at(X,[Y|T],0,[W|T]).
+delete_at(X,[Y|Z],0,Z).
+delete_at(X,[A|B2],N,[A|B1]):-
+	C is N-1,
+	delete_at(X,B2,C,B1).
 
 /* Problem 7 Test: */
 
@@ -315,13 +321,17 @@ zip([1],[a,b],Zs) should give Zs = [(1,a)] */
 
 /* Problem 8 Answer: */
 
-/* Problem 8 Test: */
-%:- zip([1,2,3],[a,b,c],[(1,a),(2,b),(3,c)]). % SUCCEED
-%:- zip([],[a,b,c],[]).                  % SUCCEED
-%:- zip([1,3],[],[]).                    % SUCCEED
-%:- zip([1,3],[2],[(1,2)]).              % SUCCEED
+zip([],[],[]).
+zip([H|T],[H1|T1],[(H,H1)|T2]):-
+	zip(T,T1,T2).
 
-%:- zip([1],[2],[(2,3)]).                 % FAIL
+/* Problem 8 Test: */
+ % zip([1,2,3],[a,b,c],[(1,a),(2,b),(3,c)]). % SUCCEED
+% zip([],[a,b,c],[]).                  % SUCCEED
+% zip([1,3],[],[]).                    % SUCCEED
+% zip([1,3],[2],[(1,2)]).              % SUCCEED
+
+% zip([1],[2],[(2,3)]).                 % FAIL
 %:- zip([1],[a,b],[(1,a),(1,b)]).         % FAIL
 
 /* Problem 9:
@@ -333,6 +343,26 @@ merge([10,3,2], [11,5,2], M) should give M =[11,10,5,3,2,2].
  */
 
 /* Problem 9 Answer: */
+
+merge([],[],_).
+
+merge([],[Yh|Yt],[Zh|Zt]):-
+	Yh = Zh,
+	merge([],Yt,Zt).
+
+merge([Xh|Xt],[Yh|Yt],[Zh|Zt]):-
+	Xh < Yh,
+	Zh = Yh,
+	merge([Xh|Xt],Yt,Zt).
+
+merge([Xh|Xt],[],[Zh|Zt]):-
+	Xh = Zh,
+	merge(Xt,[],Zt).
+
+merge([Xh|Xt],[Yh|Yt],[Zh|Zt]):-
+	Xh >= Yh,
+	Zh = Xh,
+	merge(Xt, [Yh|Yt],Zt).
 
 /* Problem 9 Test: */
 %:- merge([10,3,2],[11,5,2],[11,10,5,3,2,2]) .       % SUCCEED
@@ -350,6 +380,10 @@ merge([10,3,2], [11,5,2], M) should give M =[11,10,5,3,2,2].
 */
 
 /* Problem 10 Answer: */
+
+greater_than(succ(_),0).
+greater_than(succ(X),succ(Y)):-
+	greater_than(X,Y).
 
 /* Problem 10 Test: */
 % :- greater_than(succ(succ(succ(0))),succ(0)).        % SUCCEED
@@ -371,6 +405,9 @@ merge([10,3,2], [11,5,2], M) should give M =[11,10,5,3,2,2].
 
 /* Problem 11 Answer: */
 
+subtract(Num1,Num2,Result):-
+	add(Num2,Result,Num1).
+
 /* Problem 11 Test: */
 % :- subtract(succ(succ(0)), succ(0), succ(0)).       % SUCCEED
 % :- subtract(succ(succ(0)), 0, succ(succ(0))).       % SUCCEED
@@ -386,6 +423,13 @@ For example...
 has_subseq([a,b,c,d],[b,d]) should succeed, but has_subseq([a,b,c,d],[b,e]) should fail. */
 
 /* Problem 12 Answer */
+
+has_subseq([_],[]).
+has_subseq([],[]).
+has_subseq([H|T],[H1|T1]):-
+	has_subseq(T,[H1|T1]).
+has_subseq([H|T],[H1|T1]):-
+	has_subseq(T,T1).
 
 /* Problem 12 Test: */
 %:- has_subseq([a,g,b,d],[g,b]).     % SUCCEED
