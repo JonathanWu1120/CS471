@@ -177,7 +177,8 @@ graphical tracer".
 
 /* Problem 1 Answer */
 
-
+prove([]).
+prove([H|T]) :-H,prove(T).
 
 /* Problem 2:
    In class we discussed the 'is' predicate for evaluating expressions. Write a
@@ -188,6 +189,11 @@ graphical tracer".
 */
 
 /* Problem 2 Answer: */
+
+result([],[]).
+result([H|T],[H1|T1]):-
+	H1 is H,
+	result(T,T1).
 
 /* Problem 2 Test */
 % :- result([],[]).
@@ -208,6 +214,9 @@ graphical tracer".
 /* Problem 3 Answer */
 
 sumlist([], 0).
+sumlist([H|T],S):-
+	S1 is S - H,
+	sumlist(T,S1).
 
 /* Problem 3 Test */
 /* There should be no warnings when compiling,
@@ -237,6 +246,9 @@ sumlist([], 0).
 
 sumlist2(List,Sum) :- sumlist2(List, 0, Sum).
 sumlist2([], Sum, Sum).
+sumlist2([H|T],S,S1):-
+	S2 is H + S,
+	sumlist2(T,S2,S1).
 
 /* Problem 4 Test */
 
@@ -262,6 +274,12 @@ sumlist2([], Sum, Sum).
 
 /* Problem 5 Answer */
 
+sumPartialR(1,[1]).
+sumPartialR(N,[H,H1|T]):-
+	H1 is H-N,
+	N1 is N - 1,
+	sumPartialR(N1,[H1|T]).
+	
 
 /* Problem 5 Test */
 
@@ -292,6 +310,12 @@ sumlist2([], Sum, Sum).
 
 /* Problem 6 Answer */
 
+sumPartialL(N,Lst):-
+	sumPartialL(N,N,Lst).
+sumPartialL(1,S,[S]).
+sumPartialL(_,H,[H,H1|T]):-
+	N is H1-H,
+	sumPartialL(N,H1,[H1|T]).
 
 /* Problem 6 Test */
 
@@ -330,6 +354,12 @@ edge(f,e).
 
 /* Problem 7 Answer */
 
+outgoing(X,Y):-
+	findall(Z,edge(X,Z),Y).
+incoming(X,Y):-
+	findall(Z,edge(Z,X),Y).
+
+
 /* Problem 7 Test */
 % :- outgoing(a,X), X = [b,f,c].
 % :- outgoing(e,X), X = [].
@@ -364,6 +394,10 @@ edge(f,e).
 
 /* Problem 8 Answer: */
 
+swap(leaf(X),leaf(X)).
+swap(tree(X,Y),tree(A,B)):-
+	swap(Y,A),
+	swap(X,B).
 
 /* Problem 8 Test: */
 % :- swap( tree( tree(leaf(1), leaf(2)), leaf(4)), T), T  =  tree( leaf(4), tree(leaf(2), leaf(1))).
@@ -395,6 +429,21 @@ edge(f,e).
 
   
 /* Problem 9 Answer: */
+
+isBinarySearchTree(node(X,leaf,leaf)).
+isBinarySearchTree(node(X,node(Y,leaf,leaf),leaf)):-
+	X >= Y.
+isBinarySearchTree(node(X,leaf,node(Y,leaf,leaf))):-
+	X =< Y.
+isBinarySearchTree(node(X,node(Y,leaf,leaf),node(Z,leaf,leaf))):-
+	X >= Y,
+	X =< Z.
+isBinarySearchTree(node(X,node(Y,Y1,Y2),node(Z,Z1,Z2)):-
+	isBinarySearchTree(node(Y,Y1,Y2)),
+	isBinarySearchTree(node(Z,Z1,Z2)).
+
+
+	 
 
 /* Problem 9 Test: */
 
@@ -432,6 +481,27 @@ t5(T5) :- T5 =  node(5,node(3,node(7,node(1,leaf,leaf),leaf),leaf),node(3,leaf,l
 */
 
 /* Problem 10 Answer: */
+
+d(x,x,1):- !.
+d(C,x,0):-
+	number(C).
+d(C*x,x,C):-
+	number(C).
+d(-U,x,-R):-
+	d(U,x,R).
+d(U+V,x,UR+VR):-
+	d(U,x,UR),
+	d(V,x,VR).
+d(U-V,x,UR-VR):-
+	d(U,x,UR),
+	d(V,x,VR).
+d(U*V,x,U*VR+V*UR):-
+	d(U,x,UR),
+	d(V,x,VR).
+d(U^N,x,N*U^n1*UR):-
+	d(U,x,UR),
+	N1 is N-1.
+
 
 /* Problem 10 Test: */
 
