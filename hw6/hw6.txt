@@ -1,0 +1,10 @@
+Jonathan Wu, Santos Acosta, Alexander Orellana, Bernie Wong
+
+4. Many storage-management algorithms maintain a list of free blocks.  Here are two different algorithms, first fit and best fit, used to search this list and return a block of the appropriate size.  Which strategy, if either, will result in lower external fragmentation?  What does external fragmentation depend on?
+
+Problem 4 Answer: First-fit storage management is faster than best-fit, but this results in more fragmentation. Best-fit can result in small unusable holes so fragmentation will still be a problem. External fragmentation happens when there is a waste of space between allocated objects, this occurs when processes are frequently loaded and unloaded, resulting in the availiable memory being broken into small chunks. This depends on the algorithm used for storage management, you want to minimize the amount of small holes between contiguous memory to minimize fragmentation.
+Source: http://lass.cs.umass.edu/~shenoy/courses/fall12/lectures/notes/Lec12_notes.pdf
+
+5. What is the complexity of using first fit algorithm to allocate blocks?  Briefly explain an algorithm to speed up the allocation. What is the complexity of this modification?
+
+Problem 5 Answer: The first fit algorithm runs in O(N^2) time. This algorithm, when processing the next request, scans the previous blocks in order and places the request in the first block that fits, resulting in N^2 time. A way to speed this up would be to add in a self balancing binary search tree to locate the first block. In first-fit, it takes O(N) time to find the block for each request and it must be done for N blocks, resulting in the O(N^2) time. The searching part can be simplified by putting the block sizes in a binary search tree and searching for the block in that manner, reducing the time of O(N) to O(log(N)). The tree should be self-balancing since blocks will be removed continuously and the binary search tree must maintain the structure. Reducing the search time results in the algorithm running in O(Nlog(N)) time.
