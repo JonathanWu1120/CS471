@@ -1,5 +1,6 @@
 Jonathan Wu, Santos Acosta, Alexander Orellana, Bernie Wong
 
+
 1. 167 exercise 3.1
 Indicate the binding time (when the language is designed, when the program is linked, when the program begins execution, etc.) for each of the following decisions in your favorite programming language and implementation. Explain any answers you think are open to interpretation.
 
@@ -35,6 +36,9 @@ b) Stack grows downwards so the addresses get lower
 c) Found in powR.s 
 
 3. Now compile powR.c to assembly code on your machine using the command "powR -O2 -S powR.c". Compare the assembly file created using optimization switch, -O2, with the assembly file created without optimization (from the previous problem).  Pay attention to how pow's recursion is "implemented".  How are they different?
+
+Problem 3 Answer:
+Unlike the first assembly code, the base is is handled before checking if power is equal to 0, not after. It sets the accumulator to 1 first. Then it handles checking the initial value of power by using testl on the register with power itself to see if the bitwise AND turns up 0, rather than comparing it with 0. Then the recursion being implemented in the second assembly code is different in that it doesn't actually use recursion. Every time it runs through .L2, the tag where the instructions for the calculation is handled is located, it multiplies the register that accumulates the product with the register containing the base. It then decrements the register containing power by 1. These two instructions repeat until the register containing power reaches 0, in which the program will stop repeating and end. Unlike the first assembly code, call powR is never used, so there is no recursion.
 
 4. Many storage-management algorithms maintain a list of free blocks.  Here are two different algorithms, first fit and best fit, used to search this list and return a block of the appropriate size.  Which strategy, if either, will result in lower external fragmentation?  What does external fragmentation depend on?
 
