@@ -1,5 +1,41 @@
 Jonathan Wu, Santos Acosta, Alexander Orellana, Bernie Wong
 
+1. 167 exercise 3.1
+Indicate the binding time (when the language is designed, when the program is linked, when the program begins execution, etc.) for each of the following decisions in your favorite programming language and implementation. Explain any answers you think are open to interpretation.
+
+C++
+
+1a) The number of built-in functions (math, type queries, etc.)
+  Language design time
+1b)The variable declaration that corresponds to a particular variable reference (use)
+  Compile Time
+1c)The maximum length allowed for a constant (literal) character string
+  65,535 bytes.
+  reference: https://docs.microsoft.com/en-us/cpp/cpp/string-and-character-literals-cpp?view=vs-2019
+1d)The referencing environment for a subroutine that is passed as a parameter
+  Compile Time
+1e)The address of a particular library routine
+  Link time
+1f)The total amount of space occupied by program code and data
+  Run Time
+
+2.In assignment 1 problems 2 and 3 you studied  iterative and functional versions of the pow function.  Download and compile powR.c to assembly code on your machine: Use the command gcc -S powR.c You can run this remotely on the department machines by ssh remote.cs.binghamton.edu -l<your id>
+Problem 2 Answer:
+a) (Note: Assuming 4 byte offset)
+	
+	rbp + 4: Return address that powR uses to return to the function that called it
+	rbp - 4: var 1 (pow)
+	rbp - 8: var 2 (base)
+	rbp - 16: Stack pointer (End of main function's AR & recursive calls will grow down from here)
+
+
+b) Stack grows downwards so the addresses get lower
+
+
+c) Found in powR.s 
+
+3. Now compile powR.c to assembly code on your machine using the command "powR -O2 -S powR.c". Compare the assembly file created using optimization switch, -O2, with the assembly file created without optimization (from the previous problem).  Pay attention to how pow's recursion is "implemented".  How are they different?
+
 4. Many storage-management algorithms maintain a list of free blocks.  Here are two different algorithms, first fit and best fit, used to search this list and return a block of the appropriate size.  Which strategy, if either, will result in lower external fragmentation?  What does external fragmentation depend on?
 
 Problem 4 Answer: First-fit storage management is faster than best-fit, but this results in more fragmentation. Best-fit can result in small unusable holes so fragmentation will still be a problem. External fragmentation happens when there is a waste of space between allocated objects, this occurs when processes are frequently loaded and unloaded, resulting in the availiable memory being broken into small chunks. This depends on the algorithm used for storage management, you want to minimize the amount of small holes between contiguous memory to minimize fragmentation.
@@ -8,3 +44,22 @@ Source: http://lass.cs.umass.edu/~shenoy/courses/fall12/lectures/notes/Lec12_not
 5. What is the complexity of using first fit algorithm to allocate blocks?  Briefly explain an algorithm to speed up the allocation. What is the complexity of this modification?
 
 Problem 5 Answer: The first fit algorithm runs in O(N^2) time. This algorithm, when processing the next request, scans the previous blocks in order and places the request in the first block that fits, resulting in N^2 time. A way to speed this up would be to add in a self balancing binary search tree to locate the first block. In first-fit, it takes O(N) time to find the block for each request and it must be done for N blocks, resulting in the O(N^2) time. The searching part can be simplified by putting the block sizes in a binary search tree and searching for the block in that manner, reducing the time of O(N) to O(log(N)). The tree should be self-balancing since blocks will be removed continuously and the binary search tree must maintain the structure. Reducing the search time results in the algorithm running in O(Nlog(N)) time.
+
+
+6) What is garbage? How is it created, and why is it a problem? Discuss the
+comparative advantages of reference counts and tracing collection as a means
+of solving the problem.
+
+Problem 6 Answer: Garbage is simply heap objects that are past their lifetime or are unable to be reached. It is created by operations in a program, such as instantiating an object, appending to the end of a list, assigning a long value to a previously short string. This is an issue because releasically there is a limited amount of data a computer has. So if this garbage is not deallocated the program will eventually run out of memory. 
+-plp
+
+Reference counts vs tracing collection
+Reference count:
+Reference count work only if language is strongly typed
+Do not work for circular structures
+Does not require a reversed pointer indicator for every heap block
+
+tracing:
+Can handle cycles
+Must "stop the word" periodically to reclaim space
+Require more overheard to prevent "stop the world" PROBLEM
