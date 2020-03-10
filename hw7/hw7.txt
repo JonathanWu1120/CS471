@@ -1,1 +1,64 @@
-3. Named subroutines that are nested have state, and the state can be changed. In the first foo call, lex is present in both foo and bar, so foo gets the value for lex from the subroutine call. After it prints the value of lex, it calls bar, and since bar does not have parameters it adopts the value of lex from the outside function foo and uses that value for the lex value in bar. THat makes the value of lex 5 and once the foo call is finished the second foo call repeats the same steps and lex is already set to 5 in that case, so when foo(3) is called, var does not retrieve the value of lex from foo and uses the value from the foo(2) call.
+1)
+a) The lifetime of an object refers to how long a variable exists during the program's execution and the length of time that memory is allocated for it.
+   Visibility on the other hand, refers to where the variable is able to be referenced from.
+
+b) Scope is the area of a program where the binding between a name and an object exists/is still used.
+
+c)
+(Python)
+def a():
+   y = 12
+   return 22
+
+def b():
+   a()
+   print(y) // y is not in scope at this time but it is still alive on the stack
+
+def c():
+   b()
+
+(C)
+
+void a(){
+printf("%d\n",x); //Throws an error because x is out of scope but it is still live in main
+}
+
+
+int main(int argc, char ** argv){
+int x = 0;
+a();
+return 0;
+}
+
+(C++)
+
+void a(){
+static int x = 1;
+}
+
+int main(int argc, char ** argv){
+a();
+std::cout << x << std::endl; //x is out of scope here but is still live because static variables are in the heap, not the stack
+return 0;
+}
+
+
+
+2)
+a) The program would print 29 because it will just use the global variables.
+b) The program would print 11 because the add function got y from first() and x from the global intitialization.
+c) The program would print 5 because the add function got y from first() and x from second()
+3.Page 768 exercise 14.11.
+Named subroutines that are nested have state, and the state can be changed. In the first foo call, lex is present in both foo and bar, so foo gets the value for lex from the subroutine call. After it prints the value of lex, it calls bar, and since bar does not have parameters it adopts the value of lex from the outside function foo and uses that value for the lex value in bar. That makes the value of lex 5 and once the foo call is finished the second foo call repeats the same steps and lex is already set to 5 in that case, so when foo(3) is called, var does not retrieve the value of lex from foo and uses the value from the foo(2) call.
+
+7. pg. 286 exercise 6.1
+n Section 6.1.2 (“Orthogonality”), we noted that C uses=for assignmentand==for equality testing. The language designers state: “Since assignmentis about twice as frequent as equality testing in typical C programs, it’s ap-propriate that the operator be half as long” [KR88, p. 17]. What do youthink of this rationale?
+
+I agree with this rationale. If something occurs often enough it should be easy and quick to do. However, it is confusing when coming from another language that uses = for equality, and it could lead to a very difficult to find error. But overall, it makes sense to have = as assignment since it occurs more frequently than equality.
+
+8. Explain the notion of definite assignment in Java and C
+
+Java and C prevent the use of uninitialized variables - PLP 239
+Advantage - It prevents subtle errors that could be caused by unitialized variables
+Disadvantage - The rule is conservative, so it might prevent code that never actually used an uninitialized variable from running
+-PLP 239
