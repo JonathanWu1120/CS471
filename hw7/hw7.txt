@@ -1,3 +1,5 @@
+Jonathan Wu, Santos Acosta, Alexander Orellana, Bernie Wong
+
 1)
 a) The lifetime of an object refers to how long a variable exists during the program's execution and the length of time that memory is allocated for it.
    Visibility on the other hand, refers to where the variable is able to be referenced from.
@@ -50,6 +52,22 @@ b) The program would print 11 because the add function got y from first() and x 
 c) The program would print 5 because the add function got y from first() and x from second()
 3.Page 768 exercise 14.11.
 Named subroutines that are nested have state, and the state can be changed. In the first foo call, lex is present in both foo and bar, so foo gets the value for lex from the subroutine call. After it prints the value of lex, it calls bar, and since bar does not have parameters it adopts the value of lex from the outside function foo and uses that value for the lex value in bar. That makes the value of lex 5 and once the foo call is finished the second foo call repeats the same steps and lex is already set to 5 in that case, so when foo(3) is called, var does not retrieve the value of lex from foo and uses the value from the foo(2) call.
+
+Question 5: pg286 exercise 6.1
+We noted in Section 6.1.1 that most binary arithmetic operators are left-associative in most programming languages. In Section 6.1.4, however, we also noted that most
+compilers are free to evaluate the operands of a binary operator in either order. Are these statements contradictory? Why or why not?
+
+Answer: These statements aren't contradictory. While binary arithmetic operators are left-associative in most programming languages, it's not always used by the compiler.
+This is because the compiler will have issues trying to determine what to evaluate first in the event we have two or more operators of the same precedence in a single
+expression, but have different associativities at the same time.
+
+Source: https://www.geeksforgeeks.org/operator-precedence-and-associativity-in-c/
+
+Question 6: pg287 exercise 6.7
+Is &(&i) ever valid in C? Explain.
+
+Answer: This is never valid. When you take a reference of something, the lvalue is taken and then an rvalue is returned. Because of this, &(&i) is the same as &(some rvalue),
+which is not valid.
 
 7. pg. 286 exercise 6.1
 n Section 6.1.2 (“Orthogonality”), we noted that C uses=for assignmentand==for equality testing. The language designers state: “Since assignmentis about twice as frequent as equality testing in typical C programs, it’s ap-propriate that the operator be half as long” [KR88, p. 17]. What do youthink of this rationale?
