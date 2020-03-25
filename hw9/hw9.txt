@@ -1,2 +1,68 @@
+Jonathan Wu, Santos Acosta, Alexander Orellana, Bernie Wong
 
-oo
+Assignment 9
+
+1) Discuss the tradeoffs between pointers and the recursive types that arise naturally in a language with a reference model of variables.
+
+The biggest tradeoff would be the elegance/amount of code needed. Since everything is a reference in the reference model and dereferencing is done automatically,
+the code required for say making a tree is much shorter w/ recursive types
+On the other hand, reference models hide a lot of what is going on underneath the hood. So it could be confusing if you are not aware of how reecursive types work in the language.
+
+PLP 378
+2) What is the difference between a pointer and an address? Between a pointer
+and a reference?
+A pointer is a high level concept. It is simply a variable whose value is a reference to an object.
+An address is a low level concept, a location of a word in memory. References refer to an existing variable.
+
+PLP 377
+
+3) page 405 exercise 8.12
+Consider the following C declaration, compiled on a 64-bit x86 machine:
+
+    struct {
+        int n;
+        char c;
+    } A[10][10];
+if the address of A[0][0] is 1000(decimal), what is the address of A[3][7]?
+
+Since this is a 64-bit x86 machine, the size of the struct is 8 because the size of the int is 4, and the size of the char is 1. The wasted space from the char means that there is padding, so you add 4 + 4 to get the size of the struct, 8.
+
+Specific address of A[i][j] = addressOfStruct + size of struct *    i * 10 + size of struct * j
+So address of A[3][7] = 1000 + 8 * 3 * 10 + 8 * 7
+					  = 1296
+
+4) p421 CYU 8,9,11
+
+8-  We prefer to do work in the callee rather than the caller, even if both can do the same work because we save space if the callee does as much work as possible. Tasks
+    performed by the callee appear only once in the target program but tasks performed by the caller appear at every call site and subroutines usually appear in more than
+    one place in a program.
+
+9-  Old compilers that are on machines with less registers tends to pass arguments to the stack. New compilers on machines with a larger number of registers tend to pass
+    arguments to registers. This has led to a trend, where because for older compilers and machines, it was common to use push and pop instructions to pass stack-based
+    arguments, a separate frame pointer was used to simplify code generation and symbolic debugging. Currently in modern compilers, writers try to move away from this
+    separate frame pointer, but only in simple routines.
+
+11- Inline subroutines replace function calls with the body of said functions. However, inline subroutines can also be ignored by the compiler because it's only request,
+    though you can set inline subroutines to always be used. On the other hand, macros are expanded by the preprocessor before compilation.
+
+5) Foo is a function that takes in a pointer to a function that takes in a double and an array of doubles that returns a double (argument 1) and another double (argument 2). Foo returns a pointer to another function that takes in a double (argument 1) and any arbitrary type (argument 2).
+
+6) Suppose this C++ code
+
+const int k = ???; // you need to figure out the value of ???
+int * i = 0;
+struct A {
+    int x[k];
+};
+A* a = 0;
+printf( "%d  %d  %d %d  %d  %d  ",
+         i+1, i+k, k, a+k, &(a[9]), &(a[9]) - (a+1)  );
+
+outputs the values for the first two expressions
+     4  16
+What are its remaining outputs?  Briefly explain how the output is obtained.  (Hint: pay attention to coercion.)
+
+All of the outputs are 4 16 4 64 144 8
+
+(assuming k = 4)
+The first element is i + 1, 4. i is an int pointer and begins at 0. The size of an int is 4 bytes so the first element moves forward 4 starting from 0, and we get 4. The second output jumps over i + k places, which is 4 places, assuming k = 4, giving us the answers 4 and 16. Int takes up 4 places so 4 + 4 + 4 + 4 = 16. The third output is 4 since we are assuming k = 4. 64 is the 4th output since struct A has an array of k ints, so the struct has a size of 8. Moving the pointer by a + k you move the pointer 16 over the size of the struct. 4 ints, and multiply by k, 16 * 4 = 64. The fifth output you multiply by 9, output four shows that a = 16 so 16 * 9 = 144. The last output is obtained by doing pointer subtraction with an array with element 9, subtracting a+1 gives us the eighth element giving us 8.
