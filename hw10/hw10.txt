@@ -1,1 +1,57 @@
-i
+Jonathan Wu, Santos Acosta, Alexander Orellana, Bernie Wong
+Assignment 10
+
+1) Page 440 CYU 19
+What is an r-value reference? Why might it be useful?
+It allows an r-value to be passed to a function by reference. This can be useful
+when a new object is assigned to a temporary obj. This means the copy constructor of an obj is called and the temporary obj reference is passed in. In this way
+the temporary obj does not need to be copied over and destroyed to another obj with the same values.
+
+Instead that same temporary obj can be used/transferred to the new obj in a move constructor.
+
+PLP 430
+
+2) Page 461 CYU 36
+Coroutines should run concurrently while threads run in parallel. With a single SPU threads run based on the scheduler, but coroutines execute one at a time, however the programmer could choose when to transfer control to another coroutine. This could result in concurrency with little overhead.
+
+3)
+  a)  The result would be 25, (5* 5 returned from the squaref function)..
+  b)  The result would also be 25, (5 * 5 as defined in the macro).
+  c)   If a = 3 + 2 then squaref(x) would return 25 ( (3 + 2) * (3 + 2) -> 5 * 5 ) whereas SQUARE(x) would return 11 ( 3 + 2 * 3 + 2 -> 3 + 6 + 2 ).
+
+4) Consider the following code snippet in C-like syntax:
+int a[3];
+
+int runit(){
+   i = 1;
+   a[0] = 2;
+   a[1] = 1;
+   a[2] = 0;
+   mys(i,a[i]);
+   print(i, a[0], a[1], a[2]);
+   mys(a[1],a[i]);
+   print(i, a[0], a[1], a[2]);
+   return 0;
+}
+void mys(int x, int y){
+   x = x + y;
+   y = x - y;
+   x = x - y;
+}
+
+What is the printout of runit()  assuming each of the following parameter-passing mechanisms.  Show how you determined the answer.   There may be more than one correct answer.
+A. By value.
+The first print will print "1, 2, 1, 0" and the second print will be the same. Because it's passed by value, whatever happens in mys will stay in mys.
+B. By reference.
+The first print will print "the array address of a[1] in this spot, 2, 1, 0" because mys(i,a[i]) by reference will pass in the address of the array index, in this
+case, a[1]. The second print will remain as "1, 2, 1, 0". The address values passed into the mys function will not change the actual address of the corresponding
+array element.
+C. By value-result (copy-in/copy-out)
+The first print will print "1, 2, 1, 0". We use temp values copying the values of i and a[0], in this case, 1 and a[1], which is also 1. Then the values are passed in
+by reference. After the call, the temp values are reassigned to the original places. The second print will print "1, 2, 1, 0" as well after the calculations.
+D. By macro expansion.
+Assuming each value, i and the 3 array elements, are its own macro and mys is also a macro, both prints will output "1, 2, 1, 0" because there's nothing to save the
+value of mys after the macro expansion. The values of the individual macros will remain the same.
+E. By name.
+If we use pass by name, the value of i and each element in the array will have a symbolic name to access the value as well as update it when passing it in to mys. The
+first print will print "1, 2, 1, 0" and the second print will also print "1, 2, 1, 0" after calculations.
