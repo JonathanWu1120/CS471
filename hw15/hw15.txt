@@ -1,1 +1,183 @@
 Jonathan Wu
+Haskell Assignment 5
+Traditional lambda-notation
+Turn in answers to Part C and D
+A lambda abstraction has the form
+\ x. E
+
+In syntax in Haskell
+
+\ x -> E
+which denotes a function with formal argument x and with body E
+E is called \ -term (or \ -expression)
+
+Functions do not have names
+Functions have a single argument
+Functions with one argument can be generalized to multiple args
+The only thing a function can do is to apply it to an argument
+Notation used
+E F
+to denote the application of function E to actual argument F
+There are only three kinds of expressions
+
+E ::=	
+
+
+
+x	 	Variables
+
+| E1  E2	
+Application
+
+| \x. E	
+Abstraction
+Part A:
+You need to do this part inorder to understand the rest of the assignment.
+Examples using Haskell  
+ 
+\x -> x : is an example of a lambda abstraction which x  is a variable bound by lambda.
+
+What is the type of  (\x -> x)?
+ 
+What is the value of (verify in ghci).
+(\x -> x) 3 ?
+(\x -> x) (+) 5 3 ?
+(\x -> x) (+)? 
+What would be a descriptive name for the abstractions in 2.b?
+ 
+What is the value of (verify in ghci).
+(\x -> x +x ) 3
+What is the expression ? (E)
+ 
+What is the value of (verify in ghci).
+(\x -> 3) 6 ?
+What would be a descriptive name for this abstractions?
+Example of using lambda expressions to represent numbers
+We shows how to express integers as lambda abstractions.  We define what integer 0 looks like and a function successor that is applied recursively k+1 times to produce the k's integer.  Therefore each integer in lambda calculus is in fact a function. (Underline indicates what will be changed.) Notice there is NO recursion!
+zero = \ s  . \ z . z
+successor = \ n. \s. \ z ( s (( n s ) z ) ).
+one =  \ s. \ z . ( s z)
+two =  \ s. \z . ( s (s z)) 
+
+one ??=?? successor  zero
+Apply successor function to zero
+Replace words with lambda terms
+successor zero   =   \ n. \ s. \ z. ( s ( ( n s ) z ) ) (\ s  . \ z . z)
+
+=> \ n. \ s. \ z. ( s ( ( n s ) z ) ) (\ s'  . \ z . z) 
+1) n to be replaced by lambda term
+     (\ s'  . \ z . z) 
+   and rename zero's s to s'.
+=> \ s. \ z. ( s (  ( \ s'  . \ z . z) s)  z)	2) The result is
+   ( \ s'  . \ z . z)
+  Now apply
+   \ s'  . \ z . z to  s
+=>  \ s. \ z. ( s ( \z' . z') z) )	3) The result is ( \z . z). 
+  Rename z to z'
+  Now apply ( \z' . z') to z.
+=> \ s. \ z. ( s z )	one's representation
+
+Lambda Calculus is a simple notations that can be use to compute.
+---- but what about recursion ???
+-------------------------------------------------------------------------------------------------------------------
+(Reminder) Properties of functions
+  A function is a relation between sets that associates to every element of a first set exactly one element of the second set. (WikipediA)
+
+Referential transparency is the property that applying f to an object a will always result in the same object f (a).
+one-to-one (injective) function has the property if f ( a ) =  f (b ) then a equals b.
+
+fixed point property of a function:
+In mathematics, a fixed point (sometimes shortened to fixpoint, also known as an invariant point) of a function is an element of the function's domain that is mapped to itself by the function. (WikipediA)
+Helpful resource at Haskell.org: Haskell/Fix and recursion
+
+Meaning of recursion
+WHAT DOES RECURSION MEAN?
+You know what a recursive function looks like:
+length x = if x == [] then 0 else 1 + length (tail x)
+How do we write this as a lambda abstraction?
+(\x -> if x == [] then 0 else 1 + ???(tail x))
+Part B: What do we do with the ??? ?
+  Type (Do NOT cut and paste) the following non-recursive definition in a Haskell file and load into ghci:
+> hLen :: (Num u, Eq t) => ([t] -> u) -> [t] -> u 
+> hLen = (\f x -> if x == [] then 0 else 1 + (f (tail x)))
+> myLength ls = if ls == [] then 0 else 1 + myLength (tail ls)
+ Look at hLen --
+Is hLen recursive?  Why or why not?
+Is hLen a HOF (higher order function)? Why or why not?
+What is the value of
+hLen sum [4,5,6] ?
+hLen head [4,5,6] ?
+
+Does hLen have anything to do with sum or head?
+
+What is the value of
+hLen myLength [4,5,6] ?
+
+What is the relationship  between hLen and myLength?
+
+
+Part C: Factorial
+Add the following definition of factorial to your Haskell file and reload into ghci.
+> factorial :: Integral a => a -> a
+> factorial n = if n ==0 then 1 else n * (factorial (n - 1))
+Define hFact to be a lambda abstraction such that it takes a function as an argument, and returns another function, similar to hLen.  Write this so that hFact factorial = factorial. What is the type of hFact?  (Follow the model of hLen)
+
+hFact should take an argument and return the operation applied to the second argument.
+
+> HFact = (\f x-> if x <= 1 then 1 else f x)
+
+Apply hFact to ( ^ 2) -- What is the value of hFact (^ 2) 5?
+hFact (^ 2) 4 is 16 since you do 4^2
+
+
+What is the value of hFact factorial 5? Is it the same value as factorial 5?
+factorial 5 is 120, hFact factorial 5 is also 120, since it calls factorial with 5.
+
+Part D: General definition
+Here hFact factorial is factorial, i.e. the factorial function is the “smallest” fixed point of hFact
+
+In general, to give meaning to the recursive function
+f = (\ x. if (cond(x)) then val(x) else expr(f, x))
+(which cannot be expressed in lambda-notation), we define
+Hf =(\ F -> \ x -> if (cond(x)) then val(x) else expr(F, x))
+  Fix ( Haskell's version of the fixed-point combinator)
+Add the following definition of factorial' to your haskell file:
+
+> factorial' = hFact factorial'
+ 
+Remember that if x = f x then x is a fix point of f  so hFact factorial' equals factorial'
+
+What is the type of factorial' ?
+factorial :: Integer -> Integer
+
+Now we can define our fix point operator ( Haskells equivalent Y combinator)
+
+> fix f = f (fix f )
+
+What is the type of fix?
+
+fix :: Integer -> Integer
+
+
+What is the difference between the code below?
+
+> fix f = f (fix f )
+    and
+> fix f = f fix f ?
+
+The first iteration sends f into fix f, the second one sends f first without the associativity.
+
+Combining all we have done -- What is the value of
+factorial 4   (definition given in part C)
+720
+hFact factorial 4 ( you defined in part C #2 )
+720
+factorial' 4 (definition given in part D #1)
+does not end, infinite loop
+fix hFact 4 (definition given in part D)
+error, also an infinite loop
+
+Hope these examples pique your curiosity.
+
+
+
